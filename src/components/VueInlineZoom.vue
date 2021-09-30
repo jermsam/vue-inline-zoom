@@ -62,6 +62,15 @@ export default {
       type: Number,
       default: 1.5,
     },
+
+    glassWidthFactor: {
+      type: Number,
+      default: 0.5,
+    },
+    glassHeightFactor: {
+      type: Number,
+      default: 0.25,
+    },
   },
   data() {
     return {
@@ -75,8 +84,8 @@ export default {
       this.showZoom = true;
       // and define dimensions for the magnifying glass
       // to be 30% of the actual image
-      this.glassWidth = this.$refs.image.width * 0.3;
-      this.glassHeight = this.$refs.image.height * 0.3;
+      this.glassWidth = this.$refs.image.width * this.glassWidthFactor;
+      this.glassHeight = this.$refs.image.height * this.glassHeightFactor;
     },
     moveMagnifier(event) {
       const rect = event.target.getBoundingClientRect();

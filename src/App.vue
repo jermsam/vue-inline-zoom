@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <vue-inline-zoom :src="img" />
+    <vue-inline-zoom :src="img" style="width: 300px" />
   </div>
 </template>
 

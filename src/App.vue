@@ -1,15 +1,15 @@
 <template>
   <div id="app">
-    <my-bad :src="img" />
+    <vue-inline-zoom :src="img" />
   </div>
 </template>
 
 <script>
-import MyBad from "./components/MyBad";
+import VueInlineZoom from "./components/VueInlineZoom";
 
 export default {
   name: "App",
-  components: { MyBad },
+  components: { VueInlineZoom },
   data() {
     return {
       img:

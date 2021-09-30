@@ -1,12 +1,17 @@
+
+
 <template>
   <!-- Lets make a simple image magnifier -->
   <div class="magnify" ref="container">
     <div
-      style="postion: relative; max-height: 100%; cursor: 'grab'"
+      style="position: relative; max-height: 100%; cursor: grab"
       ref="zoom"
       @mousemove="mouseMove"
       @mouseenter="mouseEnter"
       @mouseleave="mouseLeave"
+      @touchstart="touchStart"
+      @touchmove="touchMove"
+      @touchend="touchEnd"
     >
       <!--img inherits the height from its parent-->
 
@@ -15,6 +20,7 @@
         :src="src"
         width="100%"
         style="max-height: inherit; object-fit: cover"
+        alt="vue-inline-zoom main image"
       />
       <transition name="fade">
         <div
@@ -45,13 +51,16 @@
  * Only after the native dimensions are available,
  * the script will show the zoomed version.
  */
-
 export default {
-  name: "my-bad",
+  name: "vue-inline-zoom",
   props: {
     src: {
       type: String,
       required: true,
+    },
+    zoomFactor: {
+      type: Number,
+      default: 1.5,
     },
   },
   data() {
@@ -61,42 +70,24 @@ export default {
       showZoom: true,
     };
   },
-
   methods: {
-    async mouseEnter() {
-      // fade in when mouse enters the image container
+    showMagnifier() {
       this.showZoom = true;
       // and define dimensions for the magnifying glass
       // to be 30% of the actual image
       this.glassWidth = this.$refs.image.width * 0.3;
       this.glassHeight = this.$refs.image.height * 0.3;
     },
-    mouseMove(event) {
-      // event
-      // x/y coordinates of the mouse
-      // clientX/Y gives the coordinates relative to the viewport in CSS pixels.
-      // console.log(event.clientX);
-      // console.log(event.clientY);
-      // pageX/Y gives the coordinates relative to the <html> element in CSS pixels.
-      // console.log(event.pageX);
-      // console.log(event.pageY);
-      // screenX/Y gives the coordinates relative to the screen in device pixels.
-      // console.log(event.screenX);
-      // console.log(event.screenY);
-      // const container = this.$refs.container;
-      //  const magnify_offset = container.offset();
-
-      //Mouse positions with respect to the container
-
+    moveMagnifier(event) {
       const rect = event.target.getBoundingClientRect();
       const x = event.clientX - rect.left; //x position within the element.
       const y = event.clientY - rect.top; //y position within the element.
-
+      //const x = event.pageX - this.$refs.image.parentElement.offset().left;
+      // const y =event.pageY - this.$refs.image.parentElement.offset().top;
       const magnified = this.$refs.glass,
         style = magnified.style,
         imgWidth = this.$refs.image.width,
         imgHeight = this.$refs.image.height;
-
       let xperc = (x / imgWidth) * 100;
       let yperc = (y / imgHeight) * 100;
 
@@ -111,40 +102,41 @@ export default {
       }
 
       // Set the background of the magnified image horizontal
-      style.backgroundPositionX = xperc - 9 + "%";
+      style.backgroundPositionX = xperc - 20 + "%";
       // Set the background of the magnified image vertical
-      style.backgroundPositionY = yperc - 9 + "%";
-
+      style.backgroundPositionY = yperc - 20 + "%";
       // Move the magnifying glass with the mouse movement.
       style.left = x - 50 + "px";
       style.top = y - 50 + "px";
 
-      // // console.log(glass);
-      // if (this.showZoom) {
-      //   //The background position of .large will be changed according to the position
-      //   //of the mouse over the .small image. So we will get the ratio of the pixel
-      //   //under the mouse pointer with respect to the image and use that to position the
-      //   //large image inside the magnifying glass
-      //   const rx =
-      //     Math.round((mx / image.width) * this.native_width - glass.width / 2) *
-      //     -1;
-      //   const ry =
-      //     Math.round(
-      //       (my / image.height) * this.native_height - glass.height / 2
-      //     ) * -1;
-      //   this.bgp = rx + "px " + ry + "px";
-      //   //Time to move the magnifying glass with the mouse
-      //   this.px = mx - glass.width / 2;
-      //   this.py = my - glass.height / 2;
-      //   //Now the glass moves with the mouse
-      //   //The logic is to deduct half of the glass's width and height from the
-      //   //mouse coordinates to place it with its center at the mouse coordinates
-      //   //If you hover on the image now, you should see the magnifying glass in action
-      // }
+      style.transform = `scale(${this.zoomFactor})`;
+    },
+    async mouseEnter() {
+      this.showMagnifier();
+    },
+    mouseMove(event) {
+      this.moveMagnifier(event);
     },
     mouseLeave() {
-      // fade out when mouse leaves the image
       this.showZoom = false;
+    },
+
+    touchStart(event) {
+      if (event.type === "touchstart") {
+        this.showMagnifier();
+      }
+    },
+    touchEnd(event) {
+      this.showZoom = false;
+    },
+    touchMove(event) {
+      if (this.showZoom) {
+        if (event.type === "touchmove") {
+          for (let touch of event.touches) {
+            this.moveMagnifier(touch);
+          }
+        }
+      }
     },
   },
 };

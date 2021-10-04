@@ -6,7 +6,7 @@
         style="max-height: 100%"
         width="50px"
         height="50px"
-        :zoom-factor="2"
+        :zoom-factor="1.5"
       />
     </div>
   </div>

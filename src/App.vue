@@ -1,15 +1,23 @@
 <template>
-  <div id="app">
-    <vue-inline-zoom :src="img" style="width: 300px" />
+  <div class="box">
+    <div style="width: 300px">
+      <j-vue-inline-magnifier
+        :src="img"
+        style="max-height: 100%"
+        width="50px"
+        height="50px"
+        :zoom-factor="2"
+      />
+    </div>
   </div>
 </template>
 
 <script>
-import VueInlineZoom from "./components/VueInlineZoom";
+import JVueInlineMagnifier from "./components/JVueInlineMagnifier";
 
 export default {
   name: "App",
-  components: { VueInlineZoom },
+  components: { JVueInlineMagnifier },
   data() {
     return {
       img:
@@ -19,13 +27,10 @@ export default {
 };
 </script>
 
-<style>
-#app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+<style lang="scss">
+.box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 </style>

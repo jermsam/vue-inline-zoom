@@ -124,7 +124,7 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
 .container {
-  background: #aaa;
+  background: transparent;
   max-width: 100%;
   height: auto;
   padding: 0;

@@ -4,7 +4,7 @@
       <j-vue-inline-magnifier
         :src="img"
         style="max-height: 100%; cursor: grab"
-        width="200px"
+        width="210px"
         height="140px"
         :zoom-factor="1.5"
       />
